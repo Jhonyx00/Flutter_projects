@@ -17,4 +17,6 @@ samples, guidance on mobile development, and a full API reference.
 
 
 
-<img width="202" alt="image" src="https://github.com/Jhonyx00/Flutter_projects/assets/143241366/97a46915-6aa7-43af-af9f-ab0f81e83634">
+
+
+<img width="200" alt="image" src="https://github.com/Jhonyx00/Flutter_projects/assets/143241366/fd19b3dc-d22e-4e80-a484-00e4cfbcd995">
