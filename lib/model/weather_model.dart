@@ -1,7 +1,7 @@
 class Weather {
   String? cityName;
   int? id;
-  double? feelsLike;
+  var feelsLike;
   int? uV;
   double? temperature;
   int? humidity;

@@ -11,4 +11,7 @@ class TextStyles {
       TextStyle(fontWeight: FontWeight.w400, fontSize: 25, color: Colors.white);
   static const titleOpacity =
       TextStyle(fontSize: 18, color: Color.fromARGB(134, 255, 255, 255));
+
+  static const titleHourlyWeather =
+      TextStyle(fontWeight: FontWeight.w400, fontSize: 17, color: Colors.white);
 }

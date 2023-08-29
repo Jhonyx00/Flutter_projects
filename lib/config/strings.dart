@@ -4,4 +4,5 @@ class AppStrings {
   static const windString = 'Wind';
   static const humidityString = 'Humidity';
   static const feelsLikeString = 'Feels like';
+  static const todayString = 'Today';
 }
