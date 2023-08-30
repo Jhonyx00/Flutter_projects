@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:weather_app/config/strings.dart';
@@ -11,6 +10,8 @@ import 'package:weather_app/view/current_weather.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/view/weather_by_hour.dart';
 import '../icons/icons.dart';
+import 'package:geocoding/geocoding.dart';
+
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
@@ -23,6 +24,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   double lat = 0;
   double lon = 0;
+  String message = '';
   bool tap = false;
   late Future<WeatherByHourResponse> _WeatherByHourResponse;
 
@@ -42,7 +44,7 @@ class _HomePageState extends State<HomePage> {
     if (response.statusCode == 200) {
       return WeatherByHourResponse.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Failed to load weather data');
+      throw Exception('Error');
     }
   }
 
@@ -67,18 +69,39 @@ class _HomePageState extends State<HomePage> {
   }
 
   TextEditingController cityController = TextEditingController();
-
   WeatherService client = WeatherService();
   Weather data = Weather();
 
 //search button
   Future<void> getData() async {
-    String cityName =
-        cityController.text.isNotEmpty ? cityController.text : 'Mexico city';
-    data = await client.getWeatherData(cityName);
-    // _getWeather(cityName);
+    try {
+      String cityName =
+          cityController.text.isNotEmpty ? cityController.text : 'Mexico city';
+      data = await client.getWeatherData(cityName);
+      _WeatherByHourResponse = _getWeather(latitud, longitud);
+    } catch (e) {
+      setState(() {
+        message = "Couldn't find city";
+      });
+    }
+  }
 
-    // _getWeather(cityName);
+  double latitud = 0;
+  double longitud = 0;
+
+  void _getCoordinates() async {
+    String cityName = cityController.text;
+    try {
+      List<Location> locations = await locationFromAddress(cityName);
+      if (locations.isNotEmpty) {
+        double latitude = locations[0].latitude;
+        double longitude = locations[0].longitude;
+        setState(() {
+          latitud = latitude;
+          longitud = longitude;
+        });
+      } else {}
+    } catch (e) {}
   }
 
 //location icon
@@ -171,10 +194,12 @@ class _HomePageState extends State<HomePage> {
                         right: 0,
                         child: IconButton(
                             onPressed: () {
+                              _getCoordinates();
                               setState(() {
                                 tap = false;
                                 getData();
                               });
+
                               FocusScope.of(context).unfocus();
                             },
                             icon: const Icon(Icons.search))),
